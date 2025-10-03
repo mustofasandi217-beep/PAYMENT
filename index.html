@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandi Store - Payment Gateway</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Bintang animasi */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ffd166;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .payment-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            color: #ffd166;
+        }
+
+        .payment-number {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .copy-btn {
+            background: #06d6a0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #05b587;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .menu-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ffd166;
+        }
+
+        .menu-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .menu-price {
+            font-size: 0.8rem;
+            color: #06d6a0;
+            margin-top: 5px;
+        }
+
+        .qris-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .qris-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #333;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background bintang -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="logo">SANDI STORE</h1>
+            <p class="tagline">PAYMENT SANDI STORE - Satu QRIS untuk Semua</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Metode Pembayaran -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-money-bill-wave"></i> Metode Pembayaran</h2>
+                <div class="payment-method">
+                    <div class="payment-item">
+                        <div class="payment-info">
+                            <span class="payment-name">DANA</span>
+                            <span class="payment-number">0881024028980</span>
+                            <span class="payment-number">N/A: sandi712</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('0881024028980')">Salin</button>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-info">
+                            <span class="payment-name">GOPAY</span>
+                            <span class="payment-number">0881011503069</span>
+                            <span class="payment-number">N/A: SANDI STORE</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('0881011503069')">Salin</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Telegram -->
+            <div class="card">
+                <h2 class="card-title"><i class="fab fa-telegram"></i> Telegram</h2>
+                <div class="payment-method">
+                    <a href="https://t.me/testisandi" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="payment-item">
+                            <div class="payment-info">
+                                <span class="payment-name">Channel Telegram</span>
+                                <span class="payment-number">@testisandi</span>
+                            </div>
+                            <i class="fas fa-external-link-alt" style="color: #06d6a0;"></i>
+                        </div>
+                    </a>
+                    <a href="https://t.me/sandi712p" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="payment-item">
+                            <div class="payment-info">
+                                <span class="payment-name">Chat Telegram</span>
+                                <span class="payment-number">@sandi712p</span>
+                            </div>
+                            <i class="fas fa-external-link-alt" style="color: #06d6a0;"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Menu Jual -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-shopping-cart"></i> Menu Jual</h2>
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <div class="menu-icon"><i class="fas fa-bug"></i></div>
+                        <div class="menu-name">MURBUG</div>
+                        <div class="menu-price">Rp 5.000</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon"><i class="fas fa-wifi"></i></div>
+                        <div class="menu-name">MURBAND</div>
+                        <div class="menu-price">Rp 5.000</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon"><i class="fas fa-globe"></i></div>
+                        <div class="menu-name">WEB PAYMENT</div>
+                        <div class="menu-price">Rp 3.000/2.000</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="menu-name">APK BUG</div>
+                        <div class="menu-price">Rp 5.000</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon"><i class="fas fa-ellipsis-h"></i></div>
+                        <div class="menu-name">DLL</div>
+                        <div class="menu-price">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QRIS -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-qrcode"></i> QRIS</h2>
+                <div class="qris-container">
+                    <div class="qris-code">
+                        <div>
+                            <p>QR Code Standar</p>
+                            <p>Pembayaran Nasional</p>
+                            <p>SATU QRIS UNTUK SEMUA</p>
+                        </div>
+                    </div>
+                    <p>Scan dengan aplikasi pembayaran Anda</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">Cek aplikasi penyelenggara di: www.aspi-qris.id</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 Sandi Store - All Rights Reserved</p>
+            <p>Dicetak oleh: 93600915 | Versi cetak: 1.0.03.10.25</p>
+        </div>
+    </div>
+
+    <script>
+        // Membuat bintang animasi
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Posisi acak
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Ukuran acak
+                const size = Math.random() * 3 + 1;
+                
+                // Warna acak
+                const colors = ['#ffffff', '#ffd166', '#06d6a0', '#118ab2', '#ef476f'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Animasi delay acak
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.backgroundColor = color;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Fungsi untuk menyalin teks ke clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Nomor berhasil disalin: ' + text);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+
+        // Inisialisasi bintang saat halaman dimuat
+        window.onload = createStars;
+    </script>
+</body>
+</html>
